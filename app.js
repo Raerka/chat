@@ -57,7 +57,7 @@ app.use((err, req, res, next) => {
   }
 });
 
-console.log(app.get('env'));
+
 
 // var routes = require('./routes');
 // var user = require('./routes/user');
