@@ -1,0 +1,13 @@
+{
+  "name": "chat-application-from-screencast",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "*",
+    "eslint": "4.13.1",
+    "express": "3.3.8"
+  }
+}
