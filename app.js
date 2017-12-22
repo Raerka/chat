@@ -9,6 +9,9 @@ const log = require('./libs/log')(module);
 //Функция для обработки всех приходящих запросов!!
 const app = express();
 
+//Файлы с расширением ejs обрабатывать модулем ejs-locals
+app.engine('ejs', require('ejs-locals')); //layout partial block
+
 //Шаблоны
 app.set('views', __dirname + '/templates');
 
@@ -19,9 +22,9 @@ app.use(express.favicon());
 
 // Стандартный логгер. dev - это формат логгирования, есть другие
 if (app.get('env') === 'development') {
-  app.use(express.logger('dev'));
-}else {
-  app.use(express.logger('default'));
+    app.use(express.logger('dev'));
+} else {
+    app.use(express.logger('default'));
 }
 
 //Читает тело запроса (form, json). Данные доступны в req.body....
@@ -34,30 +37,29 @@ app.use(express.cookieParser('your secret here'));
 app.use(app.router);
 //Например для метода get
 app.get('/', (req, res, next) => {
-  res.render('index', {
-    title: 'chat application',
-    body: '<b>Hello<b>'
-  });
+    res.render('index', {
+
+    });
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Обработчик ошибок - имеет четыре аргумента!!!
 app.use((err, req, res, next) => {
-  //NODE_ENV = 'production'   -   значение в реальной жизни
-  if (app.get('env') === 'development'){
-    //Встроенный обработчик
-    //app.use(express.errorHandler());
-    const errorHandler = express.errorHandler();
-    errorHandler(err, req, res, next);
-  }else {
-    res.send(500);
-  }
+    //NODE_ENV = 'production'   -   значение в реальной жизни
+    if (app.get('env') === 'development') {
+        //Встроенный обработчик
+        //app.use(express.errorHandler());
+        const errorHandler = express.errorHandler();
+        errorHandler(err, req, res, next);
+    } else {
+        res.send(500);
+    }
 });
 
 
 http.createServer(app).listen(config.get('port'), () => {
-  log.info('Express server listening on port ' + config.get('port'));
+    log.info('Express server listening on port ' + config.get('port'));
 });
 
 
