@@ -1,16 +1,17 @@
 //Module dependencies.
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var config = require('./config');
+const express = require('express');
+const http = require('http');
+const path = require('path');
+const config = require('./config');
+const log = require('./libs/log')(module);
 
 //Создание приложения
 //Функция для обработки всех приходящих запросов!!
-var app = express();
+const app = express();
 app.set('port', config.get('port'));
 
 http.createServer(app).listen(app.get('port'), () => {
-  console.log('Express server listening on port ' + config.get('port'));
+  log.info('Express server listening on port ' + config.get('port'));
 });
 
 //Обработчик - Middleware - Для реагирования на запросы
@@ -55,6 +56,8 @@ app.use((err, req, res, next) => {
     res.send(500);
   }
 });
+
+console.log(app.get('env'));
 
 // var routes = require('./routes');
 // var user = require('./routes/user');
