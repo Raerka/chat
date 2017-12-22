@@ -1,8 +1,4 @@
-
-/**
- * Module dependencies.
- */
-
+//Module dependencies.
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -12,18 +8,26 @@ var path = require('path');
 var app = express();
 app.set('port', 3000);
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), () => {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-//Обработчик - Middleware Для реагирования на запросы
+//Обработчик - Middleware - Для реагирования на запросы
 app.use((req, res, next) => {
   if(req.url === '/'){
     res.end('Hello');
   }else {
     next();
   }
-})
+});
+
+app.use((req, res, next) => {
+  if(req.url === '/forbidden'){
+    next(new Error('Oops, access denied!'));
+  }else {
+    next();
+  }
+});
 
 app.use((req, res, next) => {
   if(req.url === '/test'){
@@ -31,12 +35,25 @@ app.use((req, res, next) => {
   }else {
     next();
   }
-})
+});
 
 //Метод send - это метод который добавляется фреймворком express
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.send(404, 'Page is not found!!!');
-})
+});
+
+//Обработчик ошибок - имеет четыре аргумента!!!
+app.use((err, req, res, next) => {
+  //NODE_ENV = 'production'   -   значение в реальной жизни
+  if (app.get('env') === 'development'){
+    //Встроенный обработчик
+    //app.use(express.errorHandler());
+    const errorHandler = express.errorHandler();
+    errorHandler(err, req, res, next);
+  }else {
+    res.send(500);
+  }
+});
 
 // var routes = require('./routes');
 // var user = require('./routes/user');
@@ -54,10 +71,6 @@ app.use((req, res, next) => {
 // app.use(app.router);
 // app.use(express.static(path.join(__dirname, 'public')));
 
-// // development only
-// if ('development' == app.get('env')) {
-//   app.use(express.errorHandler());
-// }
 
 // app.get('/', routes.index);
 // app.get('/users', user.list);
