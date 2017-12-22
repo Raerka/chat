@@ -2,14 +2,15 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var config = require('./config');
 
 //Создание приложения
 //Функция для обработки всех приходящих запросов!!
 var app = express();
-app.set('port', 3000);
+app.set('port', config.get('port'));
 
 http.createServer(app).listen(app.get('port'), () => {
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log('Express server listening on port ' + config.get('port'));
 });
 
 //Обработчик - Middleware - Для реагирования на запросы
